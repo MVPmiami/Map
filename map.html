@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArcGIS API for JavaScript Tutorials: Display a map</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.23/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.23/"></script>
+  </head>
+  <body>
+    <script>
+      require([
+        'esri/config',
+        'esri/Map',
+        'esri/views/MapView',
+        'esri/widgets/Search',
+        //routes below
+        'esri/widgets/Directions',
+        'esri/symbols/SimpleMarkerSymbol',
+      ], function (
+        esriConfig,
+        Map,
+        MapView,
+        Search,
+        //rotes below
+        Directions,
+        SimpleMarkerSymbol,
+      ) {
+        esriConfig.apiKey =
+          'AAPK49f9d811b2334c76ae5174a2e64933a9rH4j4hf02A8BWrR1OUFxCI27FidXD8nlyQRDWzqbO9wGHW4h7fc-5ZD_hAofQ2yP'
+        const map = new Map({
+          basemap: 'arcgis-navigation', // navigation map
+        })
+        const view = new MapView({
+          map: map,
+          center: [27.567444, 53.893009], // Longitude, latitude
+          zoom: 13, // Zoom level
+          container: 'viewDiv', // Div element
+        })
+        const search = new Search({
+          //Add Search widget
+          view: view,
+        })
+        view.ui.add(search, 'top-left')
+
+        //routes widgets
+
+        const directions = new Directions({
+          view: view,
+          routeServiceUrl:
+            'https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World/',
+        })
+        view.ui.add(directions, 'top-right')
+
+        function createStopSymbol(outline, fill, size) {
+          return new SimpleMarkerSymbol({
+            style: 'simple-marker',
+            size: size,
+            outline: {
+              width: '2px',
+              color: outline,
+            },
+            color: fill,
+          })
+        }
+
+        // Stop symbols
+        directions.stopSymbols.first = createStopSymbol(
+          'black',
+          'white',
+          '12px',
+        )
+        directions.stopSymbols.middle = createStopSymbol(
+          'grey',
+          'white',
+          '10px',
+        )
+        directions.stopSymbols.last = createStopSymbol('white', 'black', '12px')
+
+        // Route symbol
+        directions.routeSymbol.width = '5'
+        directions.routeSymbol.color = [50, 150, 255, 0.75]
+        directions.routeSymbol.style = 'solid'
+      })
+    </script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .esri-view .esri-directions {
+        position: fixed;
+        right: 15px;
+        max-height: calc(100% - 45px) !important;
+      }
+      .esri-view .esri-component.esri-attribution {
+        position: fixed;
+      }
+
+      .esri-directions__scroller {
+        max-width: 250px !important;
+      }
+    </style>
+    <div id="viewDiv"></div>
+  </body>
+</html>

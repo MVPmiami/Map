@@ -54,7 +54,7 @@
           routeServiceUrl:
             'https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World/',
         })
-        view.ui.add(directions, 'top-right')
+        view.ui.add(directions, 'top-left')
 
         function createStopSymbol(outline, fill, size) {
           return new SimpleMarkerSymbol({
@@ -97,16 +97,11 @@
         width: 100%;
       }
       .esri-view .esri-directions {
-        position: fixed;
-        right: 15px;
         max-height: calc(100% - 45px) !important;
-      }
-      .esri-view .esri-component.esri-attribution {
-        position: fixed;
       }
 
       .esri-directions__scroller {
-        max-width: 250px !important;
+        max-width: 240px !important;
       }
     </style>
     <div id="viewDiv"></div>
